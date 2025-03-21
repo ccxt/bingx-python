@@ -1,15 +1,49 @@
-# about
+# bingx-python
+Python SDK (sync and async) for Bingx with Rest and WS capabilities.
 
-this is internal dev repo, not meant to be used by end users.
+You can check Bingx's docs here: [Docs](https://ccxt.com)
 
-# instructions
 
-- At first, generate `Personal Access Token` under `CCXT` org, with the access to this current repository and also to all other repositories (there are around 20 repositories named like: `github.com/ccxt/{exchange}-python`) with the scopes `actions, commit statuses, contents, workflows` and set that value for action secret with the name `API_TOKEN_FOR_CCXT_SINGLE_EXCHANGES`.
+You can check the SDK docs here: [SDK](https://docs.ccxt.com/#/exchanges/bingx)
 
-- Then inside `.github/workflows/transfer-all.yml` set the desired array of exchanges in matrix. On `push` event, if commit message contains `[TRANSFER]`, this repo files will be distributed to those dozen exchange repositories.
+*This package derives from CCXT and allows you to call pretty much every endpoint by either using the unified CCXT API or calling the endpoints directly*
 
-- Immediately, as those repositories get `push` event (if commit message contains the phrase `[BUILD]`) the individual exchange repos start build with `.github/workflows/build-single-exchange.yml` flow, so the exchange-specific package is generated from raw skeleton repo & ccxt files. 
+## Installation
 
-- If commit message also contained the phrase `[PUBLISH]` then they will push a package to pypi.org (you should set `PYPI_API_SECRET_SP` secret with pypi api key, under each repository). Versions are incremental by patch version at this moment.
+```
+pip install bingx
+```
 
-- All other things are WIP and can be customized.
+## Usage
+
+### Async
+
+```Python
+from bingx import BingxAsync
+
+async def main():
+    instance = BingxAsync({})
+    order = await instance.create_order("BTC/USDC", "limit", "buy", 1, 100000)
+```
+
+### Sync
+
+```Python
+from bingx import BingxSync
+
+def main():
+    instance = BingxSync({})
+    order =  instance.create_order("BTC/USDC", "limit", "buy", 1, 100000)
+```
+
+### Websockets
+
+```Python
+from bingx import BingxWs
+
+async def main():
+    instance = BingxWs({})
+    while True:
+        orders = await instance.watch_orders("BTC/USDC")
+```
+
